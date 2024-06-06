@@ -1,6 +1,8 @@
 package br.unitins.topicos2.ano2024.model.endereco;
+import br.unitins.topicos2.ano2024.dto.endereco.EnderecoDTO;
 import br.unitins.topicos2.ano2024.model.DefaultEntity;
 import jakarta.persistence.Column;
+
 
 public class Endereco extends DefaultEntity{
 
@@ -57,6 +59,16 @@ public class Endereco extends DefaultEntity{
 
     public void setComplemento(String complemento) {
         this.complemento = complemento;
+    }
+
+    public static Endereco valueOf(EnderecoDTO enderecoDTO) {
+        Endereco endereco = new Endereco();
+        endereco.setCep(enderecoDTO.cep());
+        endereco.setBairro(enderecoDTO.bairro());
+        endereco.setLogradouro(enderecoDTO.logradouro());
+        endereco.setNumero(enderecoDTO.numero());
+        endereco.setComplemento(enderecoDTO.complemento());
+        return endereco;
     }
 
 }
