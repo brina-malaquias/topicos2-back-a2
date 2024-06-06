@@ -1,0 +1,138 @@
+malakaPods - kaue e sabrina - uml
+
+@startuml malakaPods
+    
+    class Usuario {
+        - nome: String 
+        - idade: String
+        - email: String
+        - senha: String 
+        - cpf: String 
+    }
+
+    enum TipoUsuario {
+        ADMIN
+        CLIENTE
+    }
+
+    class Telefone {
+        - codigoArea: String
+        - numero: String
+    }
+
+    class PodDescartavel {
+        - nome: String
+        - valor: Double
+        - descricao: String
+    }
+
+    class Puffs {
+        - quantidade: String
+    }
+
+    class NicSalt {
+        - nome: String
+        - valor: Double
+        - descricao: String
+    }
+
+    class Sabor {
+        - sabor: String
+    }
+
+    class PodRecarregavel {
+        - nome: String
+        - valor: Double
+        - descricao: String
+    }
+
+    class Cor {
+        - cor: String
+    }
+
+    class Coil {
+        - nome: String
+        - valor: Double
+        - descricao: String
+    }
+
+    class Resistencia {
+        - ohms: Double
+    }
+
+    class Marca {
+        - nome: String
+        - descricao: String
+    }
+
+    class Produto {
+        - nome: String
+        - valor: Double
+        - descricao: String
+    }
+
+    class ItemPedido {
+        - quantidade: Integer
+        - subtotal: Double
+    }
+
+    class Pedido {
+        - valorTotal: Double
+    }
+
+    class Pagamento{
+
+    }
+
+    Enum MetodoPagamento{
+        PIX
+        CARTAO_CREDITO
+    }
+
+    class Cartao {
+      - numeroCartao : String
+      - nomeTitular: String
+      - bandeira: Barndeira
+    }
+
+    enum BandeiraCartao {
+        VISA
+        MASTERCARD
+    }
+
+    enum StatusPagamento{
+        PENDENTE
+        CONFIRMADO
+    }
+
+    Sabor "1" <-- "*" PodDescartavel
+    Puffs "1" <-- "*" PodDescartavel
+    Sabor "1" <-- "*" NicSalt
+    Cor "1" <-- "*" PodRecarregavel
+    Resistencia "*" <-- "*" Coil
+    Marca "1" <-- "*" PodDescartavel
+    Marca "1" <-- "*" PodRecarregavel
+    Marca "1" <-- "*" NicSalt
+    Marca "1" <-- "*" Coil
+
+    PodDescartavel "*" --|> "1" Produto
+    PodRecarregavel "*" --|> "1" Produto
+    NicSalt "*" --|> "1" Produto
+    Coil "*" --|> "1" Produto
+
+    Usuario "1" <-- "1" TipoUsuario
+    Usuario "1" <-- "1" Telefone 
+
+    Pedido "*" --> "1" Usuario
+    Pedido "1" --> "1" ItemPedido
+    Produto "*" <-- "1" ItemPedido
+    Pagamento "1" <-- "1" Pedido
+    Pagamento "1" --> "1" MetodoPagamento
+    MetodoPagamento "1" <-- "*" Cartao
+    Cartao "1" <-- "*" BandeiraCartao 
+    Pagamento "1" --> "1" StatusPagamento
+
+
+
+ 
+@enduml
