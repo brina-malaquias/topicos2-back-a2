@@ -2,7 +2,6 @@ package br.unitins.topicos2.ano2024.form;
 
 
 import jakarta.ws.rs.FormParam;
-import jakarta.ws.rs.core.MediaType;
 
 public class ImageForm {
     @FormParam("id")
