@@ -6,13 +6,16 @@ import java.util.List;
 import br.unitins.topicos2.ano2024.dto.pedido.CartaoCreditoDTO;
 import br.unitins.topicos2.ano2024.dto.pedido.ItemPedidoDTO;
 import br.unitins.topicos2.ano2024.dto.pedido.PedidoResponseDTO;
+import br.unitins.topicos2.ano2024.model.pagamento.BandeiraCartao;
 import br.unitins.topicos2.ano2024.model.pagamento.CartaoCredito;
 import br.unitins.topicos2.ano2024.model.pagamento.Pix;
 import br.unitins.topicos2.ano2024.model.pedido.ItemPedido;
 import br.unitins.topicos2.ano2024.model.pedido.Pedido;
 import br.unitins.topicos2.ano2024.model.produto.Produto;
 import br.unitins.topicos2.ano2024.model.usuario.Usuario;
+import br.unitins.topicos2.ano2024.repository.pedido.CartaoCreditoRepository;
 import br.unitins.topicos2.ano2024.repository.pedido.PedidoRepository;
+import br.unitins.topicos2.ano2024.repository.pedido.PixRepository;
 import br.unitins.topicos2.ano2024.repository.usuario.UsuarioRepository;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -80,7 +83,7 @@ public class PedidoServiceImpl implements PedidoService {
 
             itemPedido.updateQuantidade(itemPedidoDTO.quantidade());
 
-            pedido.plusTotalPedido(itemPedido.getSubTotal() * itemPedidoDTO.quantidade());
+            pedido.plusvalorTotal(itemPedido.getSubTotal() * itemPedidoDTO.quantidade());
         }
 
         else {
@@ -91,7 +94,7 @@ public class PedidoServiceImpl implements PedidoService {
 
             pedido.setItemPedido(itemPedido);
 
-            pedido.plusTotalPedido(itemPedido.getSubTotal() * itemPedido.getQuantidade());
+            pedido.plusvalorTotal(itemPedido.getSubTotal() * itemPedido.getQuantidade());
         }
     }
 
@@ -106,7 +109,7 @@ public class PedidoServiceImpl implements PedidoService {
 
         ItemPedido itemPedido = itemPedidoRepository.findByProduto(produtoRepository.findById(idProduto));
 
-        pedido.minusTotalPedido(itemPedido.getSubTotal() * itemPedido.getQuantidade());
+        pedido.minusValorTotal(itemPedido.getSubTotal() * itemPedido.getQuantidade());
 
         pedido.getItemPedido().remove(itemPedido);
     }
@@ -133,7 +136,7 @@ public class PedidoServiceImpl implements PedidoService {
 
         Pedido pedido = pedidoRepository.findById(idPedido);
 
-        pedido.setDataPedido(LocalDate.now());
+        pedido.setDataCompra(LocalDate.now());
 
         pedido.setEndereco(pedido.getUsuario().getEndereco());
 
@@ -148,7 +151,7 @@ public class PedidoServiceImpl implements PedidoService {
         
         Pedido pedido = validar(usuario);
 
-        Pix pagamento = new Pix(pedido.getValoTotal(), pedido.getUsuario().getPessoaFisica().getNome(), pedido.getUsuario().getPessoaFisica().getCpf());
+        Pix pagamento = new Pix(pedido.getValorTotal(), pedido.getUsuario().getNome(), pedido.getUsuario().getCpf());
 
         pixRepository.persist(pagamento);
 
@@ -168,10 +171,9 @@ public class PedidoServiceImpl implements PedidoService {
 
         Pedido pedido = validar(usuario);
 
-        CartaoCredito pagamento = new CartaoCredito(pedido.getTotalPedido(),
+        CartaoCredito pagamento = new CartaoCredito(pedido.getValorTotal(),
                                             cartaoCreditoDTO.numeroCartao(),
-                                            cartaoCreditoDTO.nomeImpressoCartao(),
-                                            usuario.getPessoaFisica().getCpf(),
+                                            cartaoCreditoDTO.nomeTitular(),
                                             BandeiraCartao.valueOf(cartaoCreditoDTO.bandeiraCartao()));
         
         cartaoCreditoRepository.persist(pagamento);
