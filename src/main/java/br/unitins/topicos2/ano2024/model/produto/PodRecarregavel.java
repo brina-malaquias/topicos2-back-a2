@@ -2,7 +2,6 @@ package br.unitins.topicos2.ano2024.model.produto;
 
 import java.util.List;
 
-import br.unitins.topicos2.ano2024.dto.produto.CorDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
